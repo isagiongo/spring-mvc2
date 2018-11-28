@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="s"%>
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="security"%>
 
 <!DOCTYPE html>
 <html>
@@ -48,15 +50,19 @@
 
 	<header id="layout-header">
 		<div class="clearfix container">
-			<a href="/" id="logo"> </a>
+			<a href="/casadocodigo" id="logo"> </a>
 			<div id="header-content">
 				<nav id="main-nav">
 					<ul class="clearfix">
-						<li><a href="/cart" rel="nofollow">Carrinho</a></li>
+						<security:authorize access="isAuthenticated()">
+							<li><a href="${s:mvcUrl('PC#listar').build() }"
+								rel="nofollow">Lista de Produtos</a></li>
+							<li><a href="${s:mvcUrl('PC#form').build() }" rel="nofollow">Cadastro
+									de Produtos</a></li>
+						</security:authorize>
+						<li><a href="/casadocodigo/carrinho" rel="nofollow">Carrinho</a></li>
 						<li><a href="/pages/sobre-a-casa-do-codigo" rel="nofollow">Sobre
 								Nós</a></li>
-						<li><a href="/pages/perguntas-frequentes" rel="nofollow">Perguntas
-								Frequentes</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -89,7 +95,9 @@
 		<ul class="clearfix book-collection">
 
 			<c:forEach items="${produtos }" var="produto">
-				<li><a href="${s:mvcUrl('PC#detalhe').arg(0, produto.id).build() }" class="block clearfix">
+				<li><a
+					href="${s:mvcUrl('PC#detalhe').arg(0, produto.id).build() }"
+					class="block clearfix">
 						<h2 class="product-title">${produto.titulo }</h2> <img width="143"
 						height="202"
 						src="https://cdn.shopify.com/s/files/1/0155/7645/products/java8-featured_large.png?v=1411490181"
